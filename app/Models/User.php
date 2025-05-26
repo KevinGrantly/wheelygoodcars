@@ -4,6 +4,7 @@ namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Laravel\Sanctum\HasApiTokens;
@@ -21,6 +22,8 @@ class User extends Authenticatable
         'name',
         'email',
         'password',
+        'role',
+        'phone',
     ];
 
     /**
@@ -42,4 +45,36 @@ class User extends Authenticatable
         'email_verified_at' => 'datetime',
         'password' => 'hashed',
     ];
+    
+    /**
+     * Get the cars associated with the user.
+     */
+    public function cars(): HasMany
+    {
+        return $this->hasMany(Car::class);
+    }
+    
+    /**
+     * Check if the user is an aanbieder.
+     */
+    public function isAanbieder(): bool
+    {
+        return $this->role === 'aanbieder';
+    }
+    
+    /**
+     * Check if the user is a koper.
+     */
+    public function isKoper(): bool
+    {
+        return $this->role === 'koper';
+    }
+    
+    /**
+     * Check if the user is a beheerder.
+     */
+    public function isBeheerder(): bool
+    {
+        return $this->role === 'beheerder';
+    }
 }
